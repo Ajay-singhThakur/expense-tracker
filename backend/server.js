@@ -18,17 +18,23 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
+app.options('*', cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.get("/", (req, res) => {
-    res.send("Server is up and running!");
+    res.json({ status: "Server is Running", time: new Date() });
 });
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/income', require('./routes/incomeRoutes'));
 app.use('/api/expense', require('./routes/expenseRoutes'));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const PORT = process.env.PORT || 10000;
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log("✅ MongoDB Connected");
+        app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
+    })
+    .catch(err => console.log("❌ DB Error:", err));
