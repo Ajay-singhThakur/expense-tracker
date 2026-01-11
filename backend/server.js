@@ -13,16 +13,22 @@ const app = express();
 // Middleware
 const allowedOrigins = [
     "https://expense-tracker-kappa-lyart.vercel.app",
-    "http://localhost:5173" // This allows your VS Code testing
+    "http://localhost:5173",
+    "http://localhost:3000" // Added just in case you use standard React port
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // This line is the key: it checks if the request origin is in our list
-        if (!origin || allowedOrigins.includes(origin)) {
+        // 1. Allow requests with no origin (like mobile apps or Postman)
+        if (!origin) return callback(null, true);
+        
+        // 2. Check if the current request origin is in our allowed list
+        if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            callback(new Error('CORS not allowed'));
+            // 3. For development, if you want it to work from ANY system, 
+            // you can temporarily use callback(null, true) here.
+            callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,

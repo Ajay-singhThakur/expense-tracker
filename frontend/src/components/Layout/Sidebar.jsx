@@ -1,30 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { LayoutDashboard, Wallet, Receipt, LogOut, Sun, Moon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext.jsx';
+import { useTheme } from '../../context/ThemeContext.jsx'; // Context use karenge
 
 const Sidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const context = useUser();
     
-    // Theme State
-    const [isDark, setIsDark] = useState(localStorage.getItem('theme') === 'dark');
-
-    // Effect to apply theme on load
-    useEffect(() => {
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [isDark]);
-
-    const toggleTheme = () => {
-        const newTheme = !isDark;
-        setIsDark(newTheme);
-        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-    };
+    // Global Theme Context se values nikaali
+    const { darkMode, toggleTheme } = useTheme();
 
     if (!context) return null;
     const { user, logout } = context;
@@ -41,10 +27,10 @@ const Sidebar = () => {
     ];
 
     return (
-        <aside className="w-72 bg-white dark:bg-slate-900 h-screen border-r dark:border-slate-800 p-8 flex flex-col fixed left-0 top-0 shadow-sm z-40 transition-colors duration-300">
+        <aside className="w-72 bg-white dark:bg-slate-900 h-screen border-r border-slate-100 dark:border-slate-800 p-8 flex flex-col fixed left-0 top-0 shadow-sm z-40 transition-colors duration-300">
             {/* Logo Section */}
             <div className="flex items-center gap-3 mb-12 px-2">
-                <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-blue-100">
+                <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-blue-100 dark:shadow-none">
                     ET
                 </div>
                 <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">Expense Tracker</span>
@@ -58,7 +44,7 @@ const Sidebar = () => {
                         to={item.path} 
                         className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all font-medium ${
                             location.pathname === item.path 
-                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' 
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 dark:shadow-none' 
                             : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                         }`}
                     >
@@ -69,8 +55,27 @@ const Sidebar = () => {
 
             {/* Bottom Section: Theme Toggle & User Profile */}
             <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-6">
+                
+                {/* THEME TOGGLE BUTTON - Added above User Name */}
+                <div className="px-2 mb-4">
+                    <button 
+                        onClick={toggleTheme}
+                        className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl font-bold transition-all border ${
+                            darkMode 
+                            ? 'bg-slate-800 border-slate-700 text-yellow-400 hover:bg-slate-700' 
+                            : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-slate-100'
+                        }`}
+                    >
+                        {darkMode ? (
+                            <><Sun size={20} /> <span className="text-sm text-slate-200">Light Mode</span></>
+                        ) : (
+                            <><Moon size={20} /> <span className="text-sm text-slate-600">Dark Mode</span></>
+                        )}
+                    </button>
+                </div>
 
-                <div className="flex items-center gap-4 mb-6 px-2 pt-4">
+                {/* User Profile */}
+                <div className="flex items-center gap-4 mb-6 px-2">
                     <img 
                         src={user?.profileImageUrl ? `http://localhost:5000/${user.profileImageUrl}` : `https://ui-avatars.com/api/?name=${user?.fullName || 'User'}`} 
                         className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-50 dark:ring-slate-800" 
