@@ -11,9 +11,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: "https://your-frontend-url.vercel.app", // Paste your Vercel URL here
-    credentials: true
+    // Replace the URL below with your EXACT Vercel URL
+    origin: 'https://expense-tracker-mdyx1pdbe-ajay-pal-singh-thakurs-projects.vercel.app', 
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true // This is mandatory for withCredentials: true to work
 }));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
