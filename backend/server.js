@@ -10,11 +10,26 @@ connectDB();
 const app = express();
 
 // Middleware
+// backend/server.js
+
+const allowedOrigins = [
+  'https://expense-tracker-mdyx1pdbe-ajay-pal-singh-thakurs-projects.vercel.app',
+  'https://expense-tracker-ajay-pal-singh-thakurs-projects.vercel.app' // Add your shorter Vercel URL too if you have one
+];
+
 app.use(cors({
-    // Replace the URL below with your EXACT Vercel URL
-    origin: 'https://expense-tracker-mdyx1pdbe-ajay-pal-singh-thakurs-projects.vercel.app', 
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true // This is mandatory for withCredentials: true to work
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
