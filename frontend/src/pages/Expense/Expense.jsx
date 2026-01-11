@@ -5,13 +5,13 @@ import AddEntryModal from "../../components/Modals/AddEntryModal.jsx";
 import API from "../../utils/api.js";
 import toast from "react-hot-toast";
 import { Plus } from "lucide-react";
-import { useTheme } from "../../context/ThemeContext.jsx"; // Hook import kiya
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 const Expense = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { darkMode } = useTheme(); // Theme state nikali
+  const { darkMode } = useTheme();
 
   const fetchExpenses = async () => {
     try {
@@ -67,17 +67,21 @@ const Expense = () => {
   }, []);
 
   return (
-    <div className={`flex min-h-screen transition-colors duration-300 ${darkMode ? "bg-slate-900" : "bg-slate-50"}`}>
+    <div className={`flex flex-col md:flex-row min-h-screen transition-colors duration-300 ${darkMode ? "bg-slate-900" : "bg-slate-50"}`}>
       <Sidebar />
-      <main className="flex-1 ml-72 p-10">
-        <div className="flex justify-between items-center mb-10">
+      
+      {/* Container Adjusted: Mobile pe 0 margin, Desktop pe sidebar width (72) jitna margin */}
+      <main className="flex-1 ml-0 md:ml-72 p-4 md:p-10 mt-16 md:mt-0 transition-all">
+        
+        {/* Header Section: Stacked on Mobile, Row on Desktop */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
           <div>
-            <h1 className={`text-3xl font-black ${darkMode ? "text-white" : "text-slate-800"}`}>Expenses</h1>
-            <p className={darkMode ? "text-slate-400" : "text-slate-500 font-medium"}>Track your spending patterns</p>
+            <h1 className={`text-2xl md:text-3xl font-black ${darkMode ? "text-white" : "text-slate-800"}`}>Expenses</h1>
+            <p className={`text-sm md:text-base ${darkMode ? "text-slate-400" : "text-slate-500 font-medium"}`}>Track your spending patterns</p>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-red-500 text-white px-6 py-3 rounded-2xl font-bold hover:bg-red-600 shadow-lg shadow-red-900/20 transition-all hover:-translate-y-1"
+            className="flex items-center gap-2 bg-red-500 text-white px-5 py-3 md:px-6 md:py-3 rounded-2xl font-bold hover:bg-red-600 shadow-lg shadow-red-900/20 transition-all hover:-translate-y-1 w-full md:w-auto justify-center"
           >
             <Plus size={20} /> Add Expense
           </button>
@@ -85,17 +89,17 @@ const Expense = () => {
 
         <div className="grid grid-cols-1 gap-4">
           {loading ? (
-            /* DARK MODE SKELETONS */
+            /* RESPONSIVE SKELETONS */
             [1, 2, 3].map((n) => (
-              <div key={n} className={`flex items-center justify-between p-5 rounded-[2rem] border animate-pulse ${darkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-100"}`}>
+              <div key={n} className={`flex items-center justify-between p-4 md:p-5 rounded-2xl md:rounded-[2rem] border animate-pulse ${darkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-100"}`}>
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-2xl ${darkMode ? "bg-slate-700" : "bg-slate-200"}`}></div>
-                  <div className="space-y-3">
-                    <div className={`h-5 w-32 rounded-lg ${darkMode ? "bg-slate-700" : "bg-slate-200"}`}></div>
-                    <div className={`h-3 w-20 rounded-lg ${darkMode ? "bg-slate-600" : "bg-slate-100"}`}></div>
+                  <div className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl ${darkMode ? "bg-slate-700" : "bg-slate-200"}`}></div>
+                  <div className="space-y-2">
+                    <div className={`h-4 w-24 md:h-5 md:w-32 rounded-lg ${darkMode ? "bg-slate-700" : "bg-slate-200"}`}></div>
+                    <div className={`h-2 w-16 md:h-3 md:w-20 rounded-lg ${darkMode ? "bg-slate-600" : "bg-slate-100"}`}></div>
                   </div>
                 </div>
-                <div className={`h-8 w-24 rounded-xl ${darkMode ? "bg-slate-700" : "bg-slate-200"}`}></div>
+                <div className={`h-6 w-20 md:h-8 md:w-24 rounded-xl ${darkMode ? "bg-slate-700" : "bg-slate-200"}`}></div>
               </div>
             ))
           ) : expenses.length > 0 ? (
@@ -108,9 +112,9 @@ const Expense = () => {
               />
             ))
           ) : (
-            <div className={`text-center py-20 rounded-[2.5rem] border flex flex-col items-center ${darkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-100"}`}>
-               <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 text-4xl ${darkMode ? "bg-slate-700" : "bg-slate-50"}`}>💸</div>
-               <p className="text-slate-400 font-bold italic">No expenses recorded yet.</p>
+            <div className={`text-center py-16 md:py-20 rounded-[2rem] md:rounded-[2.5rem] border flex flex-col items-center ${darkMode ? "bg-slate-800 border-slate-700" : "bg-white border-slate-100"}`}>
+               <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mb-4 text-3xl md:text-4xl ${darkMode ? "bg-slate-700" : "bg-slate-50"}`}>💸</div>
+               <p className="text-slate-400 text-sm md:text-base font-bold italic px-4 text-center">No expenses recorded yet.</p>
             </div>
           )}
         </div>
