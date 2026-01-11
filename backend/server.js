@@ -11,10 +11,20 @@ connectDB();
 const app = express();
 
 // Middleware
-// backend/server.js
+const allowedOrigins = [
+    "https://expense-tracker-kappa-lyart.vercel.app",
+    "http://localhost:5173" // This allows your VS Code testing
+];
 
 app.use(cors({
-    origin: "https://expense-tracker-kappa-lyart.vercel.app", 
+    origin: function (origin, callback) {
+        // This line is the key: it checks if the request origin is in our list
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS not allowed'));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
