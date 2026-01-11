@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Adding a default background so it looks like the video */
+body {
+  @apply bg-slate-50 text-slate-900;
+}
