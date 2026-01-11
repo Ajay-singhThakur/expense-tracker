@@ -23,6 +23,9 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
+app.get("/", (req, res) => {
+    res.send("Server is up and running!");
+});
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/income', require('./routes/incomeRoutes'));
 app.use('/api/expense', require('./routes/expenseRoutes'));
