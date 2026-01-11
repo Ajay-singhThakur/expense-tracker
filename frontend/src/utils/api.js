@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000/api', // Make sure this matches your backend port
+    baseURL: 'https://expense-tracker-i0m9.onrender.com', 
+    withCredentials: true
 });
 
 // This is the interceptor you were looking for:
