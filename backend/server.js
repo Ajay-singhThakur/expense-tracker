@@ -21,13 +21,10 @@ app.use(cors({
     origin: function (origin, callback) {
         // 1. Allow requests with no origin (like mobile apps or Postman)
         if (!origin) return callback(null, true);
-        
-        // 2. Check if the current request origin is in our allowed list
+
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            // 3. For development, if you want it to work from ANY system, 
-            // you can temporarily use callback(null, true) here.
             callback(new Error('Not allowed by CORS'));
         }
     },
@@ -37,6 +34,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
