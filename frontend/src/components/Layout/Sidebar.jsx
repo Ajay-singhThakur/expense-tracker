@@ -20,6 +20,7 @@ const Sidebar = () => {
     const handleLogout = () => {
         logout();
         navigate("/login");
+        
     };
 
     const menu = [

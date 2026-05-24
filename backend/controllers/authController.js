@@ -7,6 +7,10 @@ exports.registerUser = async (req, res) => {
         const { fullName, email, password } = req.body;
         const profileImageUrl = req.file ? req.file.path : "";
 
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: "Invalid email format." });}
+
         const userExists = await User.findOne({ email });
         if (userExists) return res.status(400).json({ message: "User already exists" });
 
