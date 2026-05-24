@@ -20,9 +20,19 @@ const Signup = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
+
+        // 1. Clean the input and validate format
+        const cleanEmail = formData.email.trim().toLowerCase();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|yahoo|outlook|hotmail)\.(com|net|in|org)$/;
+
+        if (!emailRegex.test(cleanEmail)) {
+            return toast.error("Please enter a valid email address (e.g., name@gmail.com)");
+        }
+
+        // 2. Prepare Form Data for submission
         const data = new FormData();
         data.append('fullName', formData.fullName);
-        data.append('email', formData.email);
+        data.append('email', cleanEmail); // Appends the verified, clean email string
         data.append('password', formData.password);
         if (image) data.append('profileImage', image);
 
@@ -45,7 +55,7 @@ const Signup = () => {
                     <div className="flex justify-center mb-6">
                         <label className="relative cursor-pointer group">
                             <div className="w-24 h-24 rounded-full border-2 border-dashed border-blue-200 flex items-center justify-center overflow-hidden bg-slate-50 group-hover:border-blue-400 transition-all">
-                                {preview ? <img src={preview} className="w-full h-full object-cover" /> : <ImageIcon className="text-slate-300" size={30} />}
+                                {preview ? <img src={preview} className="w-full h-full object-cover" alt="Preview" /> : <ImageIcon className="text-slate-300" size={30} />}
                             </div>
                             <input type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
                         </label>

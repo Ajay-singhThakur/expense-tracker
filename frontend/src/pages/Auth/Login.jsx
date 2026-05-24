@@ -14,17 +14,17 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!emailRegex.test(email)) {
-        return toast.error("Please enter a valid email address (e.g., name@domain.com)");
-    }
+        // Clean input for validation
+        const cleanEmail = email.trim().toLowerCase();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|yahoo|outlook|hotmail)\.(com|net|in|org)$/;
+        
+        if (!emailRegex.test(cleanEmail)) {
+            return toast.error("Please enter a valid email address (e.g., name@gmail.com)");
+        }
 
         try {
-            const { data } = await API.post('/auth/login', { email, password });
-            
-            // This 'login' function comes from our Context to save user data globally
+            const { data } = await API.post('/auth/login', { email: cleanEmail, password });
             login(data.user, data.token);
-            
             toast.success(`Welcome back, ${data.user.fullName}!`);
             navigate("/dashboard");
         } catch (err) {

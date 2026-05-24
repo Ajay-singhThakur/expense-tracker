@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
         type: String, 
         required: true, 
         unique: true,
-        match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, 'Please enter a valid email address']
+        match: [/^[a-zA-Z0-9._%+-]+@(gmail|yahoo|outlook|hotmail)\.(com|net|in|org)$/, 'Please enter a valid email address']
     },
     password: { type: String, required: true },
     profileImageUrl: { type: String, default: "" }
